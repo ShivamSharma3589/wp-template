@@ -1,0 +1,1 @@
+This is a wordpress theme setup for practice purpose
