@@ -2,7 +2,7 @@
 /**
  * Template Name: Custom Attachment Template
  * Template Post Type: post
- * author: shivayasharma1149@gmail.com
+ * Author: shivayasharma1149@gmail.com
  */
 wp_enqueue_style( "post_template_css", get_template_directory_uri() . "/assets/css/post_template.css", array(), "1.0", "all" );
 get_header();
@@ -13,6 +13,7 @@ get_header();
     <section class="post-content-area">
 
         <?php
+            // SHOWING THE CATEGORIES RELATED TO THE POST
             $categories = get_the_category(); // Retrieve the categories assigned to the post
             if ($categories) {
                 echo '<div class="categories-wrapper">';
@@ -28,11 +29,15 @@ get_header();
         ?>
 
         <h1>
-            <?php the_title(); ?>
+            <?php 
+                // TO SHOW THE TITLE 
+                the_title(); 
+            ?>
         </h1>
 
         <div class="tags-section">
             <?php
+                // TO SHOW THE TAGS
                 $tags = get_the_tags();
                 if ($tags) {
                     echo '<div class="tag-title">Tags:</div>';
@@ -42,6 +47,7 @@ get_header();
         </div>
 
         <?php
+            // TO SHOW THE CONTENT RELATED TO THE POST
             the_content();
         ?>
     </section>
@@ -49,7 +55,9 @@ get_header();
 
         <!-- TO SHOW THE IMAGE STARTS -->
         <?php 
+            // CHECKING IF THERE IS ANY POST THUMBNAIL AVAILABLE
             if (has_post_thumbnail()) {
+                // SHOWING THE POST THUMBNAIL
                 the_post_thumbnail();
             }
         ?>
@@ -57,6 +65,7 @@ get_header();
 
         <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT STARTS -->
         <?php 
+            // CHECKING IF THIS POST HAS ANY ATTACHMENT OR NOT 
             $attachment_id = get_post_meta( get_the_ID(), '_custom_attachment_id', true );  
             if ( $attachment_id ) {
                 $attachment_url = wp_get_attachment_url( $attachment_id );
@@ -78,6 +87,7 @@ get_header();
 
 <div class="related-post-wrapper">
     <?php
+        // CHECKING THE RECENTLY UPLOADED POSTS
         $related_posts = new WP_Query(
             array(
                 'posts_per_page' => 3, // Number of posts to display
@@ -87,6 +97,7 @@ get_header();
             )
         );
 
+        // IF THERE ARE POSTS AVAILABLE THEN SHOWING THE POST
         if ($related_posts->have_posts()) {
             ?>
             <h3 class="other-post-heading">Recent Posts</h3>
@@ -95,7 +106,7 @@ get_header();
                 <?php 
                     while ($related_posts->have_posts()) {
                         $related_posts->the_post();
-                        ?>
+                            ?>
                             <div class="other-post-card">
                                 <a href="<?php esc_url(get_permalink()); ?>" class="image-area">
                                     <?php the_post_thumbnail(); ?>
@@ -106,23 +117,23 @@ get_header();
                                     </a>
                                     <p class="excerpt-area"><?php the_excerpt() ?></p>
                                     <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT STARTS -->
-        <?php 
-            $attachment_id = get_post_meta( get_the_ID(), '_custom_attachment_id', true );  
-            if ( $attachment_id ) {
-                $attachment_url = wp_get_attachment_url( $attachment_id );
-        ?>
-            <p>
-                <a href="<?php echo esc_url( $attachment_url ); ?>" download="attachment.png" class="attachment-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
-                        <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-                    </svg>
-                    Download
-                </a>
-            </p>
-        <?php
-            }
-        ?>
-        <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT ENDS -->
+                                    <?php 
+                                        $attachment_id = get_post_meta( get_the_ID(), '_custom_attachment_id', true );  
+                                        if ( $attachment_id ) {
+                                            $attachment_url = wp_get_attachment_url( $attachment_id );
+                                    ?>
+                                    <p>
+                                        <a href="<?php echo esc_url( $attachment_url ); ?>" download="attachment.png" class="attachment-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                                                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                                            </svg>
+                                            Download
+                                        </a>
+                                    </p>
+                                    <?php
+                                        }
+                                    ?>
+                                    <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT ENDS -->
                                     <div class="read-more-link">
                                         <a href="<?php esc_url(get_permalink()); ?>">Read more</a>
                                     </div>
