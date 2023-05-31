@@ -1,0 +1,228 @@
+.post-temp-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  display: flex;
+  padding: 20px 10px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba($color: #000000, $alpha: 0.1);
+
+  .post-content-area {
+    width: calc(100% - 400px);
+    padding: 20px;
+  }
+
+  .media-content-wrapper {
+    width: 400px;
+    padding: 20px;
+    border-left: 2px solid #eaeaea;
+  }
+}
+
+.attachment-btn {
+  display: block;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  background-color: #fff;
+  color: blue;
+  border: 1px solid blue;
+  text-align: center;
+
+  &:hover {
+    background-color: blue;
+    color: #fff;
+  }
+}
+
+.tags-section {
+  display: flex;
+  
+  .tag-title {
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  
+  ul.tags-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      a {
+        color: #fff;
+        background-color: #555;
+        display: block;
+        padding: 2px 5px;
+        text-decoration: none;
+        font-size: 12px;
+        border-radius: 3.2px;
+        margin-right: 4px;
+        margin-bottom: 4px;
+
+        &::after {
+          content: "\00D7";
+          display: inline-block;
+          color: #fff;
+          width: 12px;
+          height: 12px;
+          font-size: 18px;
+          line-height: 12px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+.categories-wrapper {
+  display: flex;
+  
+  .category-title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 28px;
+    margin-right: 5px;
+  }
+  
+  .categories-section {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      a {
+        color: #fff;
+        text-decoration: none;
+        background-color: #333;
+        font-size: 12px;
+        padding: 4px 5px;
+        margin-right: 4px;
+        border-radius: 3.2px;
+      }
+    }
+  }
+}
+
+.related-post-wrapper {
+  max-width: 1200px;
+  margin: 30px auto 0;
+  
+  .other-post-heading {
+    font-size: 18px;
+    padding: 10px 0;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  
+  .posts-grid-wrapper {
+    display: flex;
+    
+    .other-post-card {
+      box-shadow: 0px 0px 10px rgba($color: #000000, $alpha: 0.1);
+      padding: 10px;
+      margin: 0 6px 0 0;
+      width: 33.33%;
+
+      .image-area {
+        display: block;
+        margin-bottom: 15px;
+        position: relative;
+        padding-top: 70%;
+        background-color: #eee;
+
+        img {
+          display: block;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+
+      .other-post-content-area {
+
+        .title {
+          font-size: 22px;
+          font-weight: 700;
+          text-decoration: none;
+          transition: .3s ease-in-out;
+
+
+          &:hover {
+            text-decoration: underline;
+            color: blue;
+
+            h2 {
+              color: inherit;
+            }
+          }
+        }
+
+        .excerpt-area {
+          width: 100%;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          margin: 4px 0;
+          height: 82px;
+        }
+
+        .read-more-link {
+          height: 27px;
+
+          a {
+            margin: auto;
+            margin-top: 20px;
+            display: block;
+            max-width: fit-content;
+            text-decoration: none;
+            border-bottom: 2px solid blue;
+            font-size: 14px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .post-temp-wrapper {
+    max-width: 992px;
+
+    .post-content-area {
+      width: calc(100% - 300px);
+    }
+
+    .media-content-wrapper {
+      width: 300px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .post-temp-wrapper {
+    max-width: 767px;
+    flex-direction: column-reverse;
+
+    .post-content-area {
+      width: 100%;
+    }
+
+    .media-content-wrapper {
+      width: 100%;
+      border: none;
+    }
+  }
+}
