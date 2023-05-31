@@ -1,11 +1,22 @@
 <?php
-/**
- * Template Name: Custom Attachment Template
- * Template Post Type: post
- * Author: shivayasharma1149@gmail.com
- */
-wp_enqueue_style( "post_template_css", get_template_directory_uri() . "/assets/css/post_template.css", array(), "1.0", "all" );
-get_header();
+    /**
+     * Template Name: Custom Attachment Template
+     * Template Post Type: post
+     * Author: shivayasharma1149@gmail.com
+     */
+
+    /* 
+
+    How to use:
+    1. Add this template to your theme folder
+    2. Go to functions.php file and copy the code between ADD CUSTOM ATTACHMENT SUPPORT CODE comment to your code
+    3. Add the post_template.css file to your theme and link the same with the post_template.php file
+    4. Add the JS file post_template.js which is required into your functions.php file for toggling the meta box
+
+    */
+
+    wp_enqueue_style( "post_template_css", get_template_directory_uri() . "/assets/css/post_template.css", array(), "1.0", "all" );
+    get_header();
 
 ?>
 
@@ -35,6 +46,11 @@ get_header();
             ?>
         </h1>
 
+        <?php
+            // TO SHOW THE CONTENT RELATED TO THE POST
+            the_content();
+        ?>
+
         <div class="tags-section">
             <?php
                 // TO SHOW THE TAGS
@@ -45,11 +61,6 @@ get_header();
                 }
             ?>
         </div>
-
-        <?php
-            // TO SHOW THE CONTENT RELATED TO THE POST
-            the_content();
-        ?>
     </section>
     <aside class="media-content-wrapper">
 
@@ -72,8 +83,9 @@ get_header();
         ?>
             <p>
                 <a href="<?php echo esc_url( $attachment_url ); ?>" download="attachment.png" class="attachment-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
-                        <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15px" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                     </svg>
                     Download
                 </a>
@@ -85,123 +97,72 @@ get_header();
     </aside>
 </div>
 
-<div class="related-post-wrapper">
-    <?php
-        // CHECKING THE RECENTLY UPLOADED POSTS
-        $related_posts = new WP_Query(
-            array(
-                'posts_per_page' => 3, // Number of posts to display
-                'post__not_in'   => array(get_the_ID()), // Exclude the current post
-                'orderby'        => 'date', // Order by date
-                'order'          => 'DESC', // Sort in descending order
-            )
-        );
+<?php
+    // Retrieve the three most recent posts
+    $recent_posts = wp_get_recent_posts(array(
+        'numberposts' => 3,
+        'post_status' => 'publish',
+        'post__not_in'   => array(get_the_ID()), // Exclude the current post
+    ));
+    if (count($recent_posts)) {
+?>
 
-        // IF THERE ARE POSTS AVAILABLE THEN SHOWING THE POST
-        if ($related_posts->have_posts()) {
-            ?>
-            <h3 class="other-post-heading">Recent Posts</h3>
+    <div class="related-post-wrapper">
 
-            <div class="posts-grid-wrapper">
-                <?php 
-                    while ($related_posts->have_posts()) {
-                        $related_posts->the_post();
-                            ?>
-                            <div class="other-post-card">
-                                <a href="<?php esc_url(get_permalink()); ?>" class="image-area">
-                                    <?php the_post_thumbnail(); ?>
-                                </a>
-                                <div class="other-post-content-area">
-                                    <a href="<?php esc_url(get_permalink()); ?>" class="title">
-                                        <h2><?php the_title() ?></h2>
-                                    </a>
-                                    <p class="excerpt-area"><?php the_excerpt() ?></p>
-                                    <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT STARTS -->
-                                    <?php 
-                                        $attachment_id = get_post_meta( get_the_ID(), '_custom_attachment_id', true );  
-                                        if ( $attachment_id ) {
-                                            $attachment_url = wp_get_attachment_url( $attachment_id );
-                                    ?>
-                                    <p>
-                                        <a href="<?php echo esc_url( $attachment_url ); ?>" download="attachment.png" class="attachment-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
-                                                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-                                            </svg>
-                                            Download
-                                        </a>
-                                    </p>
-                                    <?php
-                                        }
-                                    ?>
-                                    <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT ENDS -->
-                                    <div class="read-more-link">
-                                        <a href="<?php esc_url(get_permalink()); ?>">Read more</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php
-                    }
-                    wp_reset_postdata(); // Restore the original post data
+        <h3 class="other-post-heading">Recent Posts</h3>
+
+        <div class="posts-grid-wrapper">
+
+            <?php
+            // Output the recent posts
+            foreach ($recent_posts as $recent) {
+                $permalink = get_permalink($recent['ID']);
+                $title = $recent['post_title'];
+                $thumbnail = get_the_post_thumbnail($recent['ID'], '');
                 ?>
-            </div>
-            <?php            
-        }
-    ?>
-</div>
+                    <div class="other-post-card">
+                        <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT STARTS -->
+                        <?php 
+                            // CHECKING IF THIS POST HAS ANY ATTACHMENT OR NOT 
+                            $attachment_id = get_post_meta( $recent['ID'], '_custom_attachment_id', true );  
+                            if ( $attachment_id ) {
+                                $attachment_url = wp_get_attachment_url( $attachment_id );
+                        ?>
+                            <a href="<?php echo esc_url( $attachment_url ); ?>" download="" class="attachment-card-btn">
+                                <span class="tooltip">Download Attached File</span>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>
+                            </a>
+                        <?php
+                            }
+                        ?>
+                        <!-- TO SHOW THE DOWNLOAD BUTTON FOR THE ATTACHMENT ENDS -->
+                        <a href="<?php echo esc_url($permalink); ?>" class="image-area">
+                            <?php echo $thumbnail; ?>
+                        </a>
+                        <div class="other-post-content-area">
+                            <a href="<?php echo esc_url($permalink); ?>" class="title">
+                                <h2><?php echo $title; ?></h2>
+                            </a>
+                            <div class="excerpt-area">
+                                <p><?php echo get_the_excerpt($recent['ID']); ?></p>
+                            </div>
+                            
+                            <div class="read-more-link">
+                                <a href="<?php echo esc_url($permalink); ?>">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+            ?>
+        </div>
+
+    </div>
+
+<?php } ?>
 
 <?php get_footer(); ?>
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="posts-grid-wrapper">
-                <div class="other-post-card">
-                    <a href="#" class="image-area">
-                        <img src="http://localhost/wp-template/wp-content/uploads/2023/05/img-feat-web-design-1024x576-1.jpg" alt="">
-                    </a>
-                    <div class="other-post-content-area">
-                        <a href="#" class="title">
-                            <h2>I am the title</h2>
-                        </a>
-                        <p class="excerpt-area">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, ad! Sunt corporis quis aperiam laboriosam temporibus. Beatae, quasi. Nostrum necessitatibus ab impedit laboriosam.</p>
-                        <div class="read-more-link">
-                            <a href="#">Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="other-post-card">
-                    <a href="#" class="image-area">
-                        <img src="http://localhost/wp-template/wp-content/uploads/2023/05/img-feat-web-design-1024x576-1.jpg" alt="">
-                    </a>
-                    <div class="other-post-content-area">
-                        <a href="#" class="title">
-                            <h2>I am the title</h2>
-                        </a>
-                        <p class="excerpt-area">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, ad! Sunt corporis quis aperiam laboriosam temporibus. Beatae, quasi. Nostrum necessitatibus ab impedit laboriosam.</p>
-                        <div class="read-more-link">
-                            <a href="#">Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="other-post-card">
-                    <a href="#" class="image-area">
-                        <img src="http://localhost/wp-template/wp-content/uploads/2023/05/img-feat-web-design-1024x576-1.jpg" alt="">
-                    </a>
-                    <div class="other-post-content-area">
-                        <a href="#" class="title">
-                            <h2>I am the title</h2>
-                        </a>
-                        <p class="excerpt-area">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, ad! Sunt corporis quis aperiam.</p>
-                        <div class="read-more-link">
-                            <a href="#">Read more</a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
